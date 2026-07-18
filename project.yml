@@ -1,0 +1,68 @@
+name: ShipCode
+
+options:
+  bundleIdPrefix: dev.shipshit
+  createIntermediateGroups: true
+  deploymentTarget:
+    iOS: "18.0"
+  developmentLanguage: en
+  xcodeVersion: "26.0"
+
+settings:
+  base:
+    CURRENT_PROJECT_VERSION: "1"
+    ENABLE_STRICT_CONCURRENCY: complete
+    MARKETING_VERSION: "0.1.0"
+    SWIFT_STRICT_CONCURRENCY: complete
+    SWIFT_VERSION: "6.0"
+
+targets:
+  ShipCode:
+    type: application
+    platform: iOS
+    sources:
+      - path: ShipCode
+    settings:
+      base:
+        CODE_SIGN_STYLE: Automatic
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_CFBundleDisplayName: ShipCode
+        INFOPLIST_KEY_LSApplicationCategoryType: public.app-category.developer-tools
+        INFOPLIST_KEY_UIApplicationSceneManifest_Generation: YES
+        INFOPLIST_KEY_UILaunchScreen_Generation: YES
+        PRODUCT_BUNDLE_IDENTIFIER: dev.shipshit.shipcode
+        PRODUCT_NAME: ShipCode
+        SUPPORTED_PLATFORMS: iphonesimulator iphoneos
+        SUPPORTS_MACCATALYST: NO
+        TARGETED_DEVICE_FAMILY: "1,2"
+
+  ShipCodeTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - path: ShipCodeTests
+    dependencies:
+      - target: ShipCode
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: YES
+        PRODUCT_BUNDLE_IDENTIFIER: dev.shipshit.shipcode.tests
+
+schemes:
+  ShipCode:
+    build:
+      targets:
+        ShipCode: all
+    run:
+      config: Debug
+    test:
+      config: Debug
+      targets:
+        - ShipCodeTests
+    profile:
+      config: Release
+    analyze:
+      config: Debug
+    archive:
+      config: Release
+
