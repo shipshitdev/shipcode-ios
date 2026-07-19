@@ -1,0 +1,41 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+permissions:
+  contents: read
+
+jobs:
+  app:
+    runs-on: macos-26
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - name: Select Xcode
+        run: sudo xcode-select -switch /Applications/Xcode.app
+      - name: Install XcodeGen
+        run: brew install xcodegen
+      - name: Generate project
+        run: xcodegen generate
+      - name: Build and test
+        shell: bash
+        run: |
+          set -euo pipefail
+          simulator_id="$(
+            xcrun simctl list devices available -j |
+              jq -r '[.devices[][] | select(.name | startswith("iPhone"))][0].udid'
+          )"
+          test -n "$simulator_id"
+          xcodebuild \
+            -project ShipCode.xcodeproj \
+            -scheme ShipCode \
+            -destination "platform=iOS Simulator,id=$simulator_id" \
+            -configuration Debug \
+            CODE_SIGNING_ALLOWED=NO \
+            test
